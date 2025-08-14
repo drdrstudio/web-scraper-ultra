@@ -1,7 +1,41 @@
-# Web Scraper - Development Progress & Documentation
+# 🕷️ Web Scraper Ultra - Complete Documentation
+
+## 🌐 Live Production Deployment
+- **API Base URL**: http://164.92.90.183
+- **GitHub Repository**: https://github.com/drdrstudio/web-scraper-ultra
+- **Status**: ✅ FULLY DEPLOYED & OPERATIONAL
+
+## 🔑 API Keys
+```
+Main Scraper API: ultra-scraper-cee75bd9cb10052c2d06868578ea9c61
+Newsletter API: newsletter-8e2974e0e2196a04e6272b2448306554
+Property API: ultra-scraper-cee75bd9cb10052c2d06868578ea9c61 (same as main)
+```
+
+## 📡 API Endpoints
+
+### Core Scraping
+- `POST /api/v3/scrape` - Scrape any website with 27+ anti-bot features
+- `GET /api/health` - System health check
+
+### Newsletter Automation
+- `POST /api/subscribe` - Auto-find and subscribe to newsletters
+- `GET /newsletter/health` - Newsletter API status
+
+### Property Owner Lookup
+- `POST /api/property/search` - Single property owner lookup
+- `POST /api/property/batch` - Batch property search (up to 100)
+- `GET /api/property/counties` - List supported counties
+- `GET /api/property/stats` - Usage statistics
+
+### Recipe & Scheduling
+- `GET /api/recipes` - List scraping templates
+- `POST /api/recipes` - Create custom recipe
+- `GET /api/schedules` - View scheduled jobs
+- `POST /api/schedules` - Schedule recurring scrapes
 
 ## Project Overview
-Advanced web scraper with enterprise-level anti-bot detection capabilities, implementing all phases from the PRD document.
+Ultra-advanced web scraper with 27+ enterprise-level anti-bot detection capabilities, deployed on DigitalOcean with full production infrastructure.
 
 ## Completed Features
 
@@ -483,7 +517,118 @@ All features from Phase 8 PRD implemented and tested:
 | MCP integration | ✅ | ✅ | Equal |
 | Included proxies | 215,084 | Variable | More value |
 
+## Phase 11: Property Owner Lookup API (✅ Complete - 2025-01-14)
+
+### Specialized Property Data Extraction
+- **Dedicated API** for property owner lookups at scale
+- **County-specific strategies** for 5 major US counties
+- **24-hour Redis caching** - 80% cost reduction
+- **Batch processing** - Up to 100 properties in parallel
+- **Pattern matching** optimized for property data
+- **Confidence scoring** for data reliability
+- **In-memory cache** for repeated lookups
+
+### Property API Features
+- Extract owner names, co-owners, mailing addresses
+- Parcel/APN/PIN numbers
+- Assessed and market values
+- Property type, year built, square footage
+- Last sale date and price
+- Legal description and zoning
+- Automatic county detection
+- Generic fallback for unsupported counties
+
+## 🚀 Production Deployment
+
+### DigitalOcean Infrastructure
+- **Droplet**: web-scraper-ultra (4GB RAM, 2 vCPUs, 80GB SSD)
+- **IP Address**: 164.92.90.183
+- **Region**: San Francisco 3
+- **Monthly Cost**: $24
+- **Status**: ✅ Active and running
+
+### Services Running
+1. **Main Scraper API** (Port 5000) - Gunicorn with 4 workers
+2. **Newsletter API** (Port 5001) - Python service
+3. **Property API** (Port 5002) - Python service
+4. **Nginx** - Reverse proxy for all services
+5. **PostgreSQL** - Local database
+6. **Redis** - Caching layer
+
+### Deployment Commands
+```bash
+# SSH to server
+ssh -i ~/.ssh/publicrecords_key root@164.92.90.183
+
+# Check service status
+systemctl status web-scraper
+systemctl status newsletter-api
+systemctl status property-api
+
+# View logs
+journalctl -u web-scraper -f
+tail -f /var/log/web-scraper/error.log
+
+# Restart services
+systemctl restart web-scraper
+systemctl restart nginx
+```
+
+## 📊 Monitoring & Maintenance
+
+### Slack Integration
+- Health checks every 5 minutes
+- Instant error alerts
+- Daily usage reports
+- Component status tracking
+- Setup: `./setup_slack_monitoring.sh`
+
+### Health Endpoints
+- Main API: http://164.92.90.183/api/health
+- Newsletter: http://164.92.90.183/newsletter/health
+- Property: http://164.92.90.183/api/property/health
+
+### Usage Statistics
+- Track API calls, success rates, response times
+- Monitor proxy health and rotation
+- CAPTCHA solve rates and costs
+- Cache hit rates and performance
+
+## 🔧 Quick Start Examples
+
+### Scrape a Website
+```bash
+curl -X POST http://164.92.90.183/api/v3/scrape \
+  -H "Authorization: Bearer ultra-scraper-cee75bd9cb10052c2d06868578ea9c61" \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com", "strategy": "auto", "use_proxy": true}'
+```
+
+### Subscribe to Newsletter
+```bash
+curl -X POST http://164.92.90.183/api/subscribe \
+  -H "Authorization: Bearer newsletter-8e2974e0e2196a04e6272b2448306554" \
+  -H "Content-Type: application/json" \
+  -d '{"domain": "techcrunch.com"}'
+```
+
+### Lookup Property Owner
+```bash
+curl -X POST http://164.92.90.183/api/property/search \
+  -H "Authorization: Bearer ultra-scraper-cee75bd9cb10052c2d06868578ea9c61" \
+  -H "Content-Type: application/json" \
+  -d '{"address": "123 Main St, Los Angeles, CA"}'
+```
+
+## 📚 Documentation
+
+- **Implementation Guide**: [CLAUDE_IMPLEMENTATION_GUIDE.md](CLAUDE_IMPLEMENTATION_GUIDE.md)
+- **Property API Guide**: [PROPERTY_API_README.md](PROPERTY_API_README.md)
+- **Newsletter API Guide**: [NEWSLETTER_API_README.md](NEWSLETTER_API_README.md)
+- **Scaling Guide**: [SCALE-FOR-BUSINESS.md](SCALE-FOR-BUSINESS.md)
+- **GitHub Repository**: https://github.com/drdrstudio/web-scraper-ultra
+
 ---
-*Last Updated: 2025-01-14*
-*Version: 6.0 - Business-Ready with MCP & LLM Integration*
-*Status: PRODUCTION READY - All features tested and documented*
+*Last Updated: 2025-01-14 (August 14, 2025)*
+*Version: 7.0 - Production Deployed with Property API*
+*Status: LIVE IN PRODUCTION - All APIs operational*
