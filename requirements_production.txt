@@ -1,0 +1,12 @@
+Flask
+requests
+beautifulsoup4
+selenium
+python-dotenv
+webdriver-manager
+gspread
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+psycopg2-binary
+gunicorn

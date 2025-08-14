@@ -1,0 +1,112 @@
+{
+  "name": "web-scraper",
+  "version": "1.0.0",
+  "description": "Advanced web scraper with anti-bot detection and LLM-friendly output",
+  "author": "Your Name",
+  "license": "MIT",
+  "mcp": {
+    "type": "stdio",
+    "command": "python",
+    "args": ["/Users/skipmatheny/Documents/cursor2/vibecoding_gemini_claude/projects/web-scraper/mcp_stdio_server.py"],
+    "env": {
+      "PYTHONPATH": "/Users/skipmatheny/Documents/cursor2/vibecoding_gemini_claude/projects/web-scraper"
+    }
+  },
+  "tools": [
+    {
+      "name": "scrape_webpage",
+      "description": "Scrape any webpage and get clean, readable content for AI processing",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The webpage URL to scrape"
+          },
+          "format": {
+            "type": "string",
+            "enum": ["clean_text", "summary", "markdown", "conversation", "structured_qa", "narrative"],
+            "default": "clean_text",
+            "description": "How to format the output for AI consumption"
+          },
+          "use_stealth": {
+            "type": "boolean",
+            "default": true,
+            "description": "Use anti-detection features to avoid being blocked"
+          }
+        },
+        "required": ["url"]
+      }
+    },
+    {
+      "name": "scrape_multiple",
+      "description": "Scrape multiple webpages at once",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "urls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of URLs to scrape"
+          },
+          "format": {
+            "type": "string",
+            "enum": ["clean_text", "summary", "markdown"],
+            "default": "summary",
+            "description": "Output format for all pages"
+          }
+        },
+        "required": ["urls"]
+      }
+    },
+    {
+      "name": "extract_data",
+      "description": "Extract specific data like emails, phone numbers, or prices from a webpage",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The webpage to extract data from"
+          },
+          "data_type": {
+            "type": "string",
+            "enum": ["emails", "phone_numbers", "prices", "dates", "links", "images"],
+            "description": "Type of data to extract"
+          }
+        },
+        "required": ["url", "data_type"]
+      }
+    },
+    {
+      "name": "analyze_website",
+      "description": "Analyze a website's structure, links, and content",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Website to analyze"
+          }
+        },
+        "required": ["url"]
+      }
+    },
+    {
+      "name": "estimate_cost",
+      "description": "Estimate the cost of scraping at scale",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "requests_per_day": {
+            "type": "integer",
+            "description": "Number of pages to scrape per day"
+          }
+        },
+        "required": ["requests_per_day"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper</title>
+</head>
+<body>
+    <h1>Web Scraper Tool</h1>
+    <form action="/scrape" method="POST">
+        <label for="url">Enter URL to scrape:</label><br>
+        <input type="text" id="url" name="url" placeholder="https://example.com" required style="width: 400px; padding: 5px; margin: 10px 0;"><br>
+        
+        <label>
+            <input type="checkbox" name="use_dynamic" value="true">
+            Use Dynamic Scraper (for JavaScript-heavy sites)
+        </label><br><br>
+        
+        <label for="destination">Data Destination:</label><br>
+        <select id="destination" name="destination" style="width: 200px; padding: 5px; margin: 10px 0;">
+            <option value="csv" selected>CSV File</option>
+            <option value="google_sheet">Google Sheet</option>
+            <option value="database">Database (PostgreSQL)</option>
+        </select><br>
+        
+        <div id="sheet-config" style="display: none; margin: 10px 0;">
+            <label for="sheet_id">Google Sheet ID (optional):</label><br>
+            <input type="text" id="sheet_id" name="sheet_id" placeholder="Leave empty for default sheet" style="width: 400px; padding: 5px;"><br>
+            <small>Get this from your Google Sheet URL: docs.google.com/spreadsheets/d/[SHEET_ID]/edit</small>
+        </div>
+        
+        <br>
+        <button type="submit" style="padding: 10px 20px;">Scrape</button>
+    </form>
+    
+    <script>
+        // Show/hide Google Sheet config based on destination selection
+        document.getElementById('destination').addEventListener('change', function() {
+            const sheetConfig = document.getElementById('sheet-config');
+            if (this.value === 'google_sheet') {
+                sheetConfig.style.display = 'block';
+            } else {
+                sheetConfig.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Environment files
+.env
+.env*.local
+.env.production
+.env.database
+
+# Data files
+scraped_data.csv
+proxies.json
+webshare_proxies.txt
+webshare_parsed.json
+*.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Vercel
+.vercel
+
+# Recipes (user data)
+recipes/*.json
+
+# Deployment
+slack_monitor_service.txt
+*.pem
+*.key
+
+# Cache
+.cache/
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Temporary files
+*.tmp
+tmp/
+temp/

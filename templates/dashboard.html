@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper Dashboard - Complete PRD Implementation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .card h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stat {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .status.active { background: #d4f8d4; color: #2a7f2a; }
+        .status.processing { background: #fff3cd; color: #856404; }
+        .status.completed { background: #cfe2ff; color: #004085; }
+        .status.failed { background: #f8d7da; color: #721c24; }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 12px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+        }
+        
+        .btn.secondary {
+            background: #6c757d;
+        }
+        
+        .btn.danger {
+            background: #dc3545;
+        }
+        
+        .recipe-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .schedule-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .job-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .job-item:last-child {
+            border-bottom: none;
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🕷️ Web Scraper PRD Complete</h1>
+        
+        <!-- Stats Grid -->
+        <div class="grid">
+            <div class="card">
+                <h2>🌐 Proxies</h2>
+                <div class="stat" id="proxy-count">0</div>
+                <p>Residential proxies active</p>
+                <span class="status active">Webshare.io Connected</span>
+            </div>
+            
+            <div class="card">
+                <h2>📋 Recipes</h2>
+                <div class="stat" id="recipe-count">0</div>
+                <p>Saved configurations</p>
+                <button class="btn" onclick="showTab('recipes')">Manage</button>
+            </div>
+            
+            <div class="card">
+                <h2>⏰ Scheduled Jobs</h2>
+                <div class="stat" id="schedule-count">0</div>
+                <p>Recurring scrapes</p>
+                <span class="status" id="scheduler-status">stopped</span>
+            </div>
+            
+            <div class="card">
+                <h2>🚀 Active Jobs</h2>
+                <div class="stat" id="active-jobs">0</div>
+                <p>Currently processing</p>
+                <button class="btn" onclick="showTab('jobs')">View All</button>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('scrape')">🔍 New Scrape</button>
+            <button class="tab" onclick="showTab('recipes')">📋 Recipes</button>
+            <button class="tab" onclick="showTab('schedules')">⏰ Schedules</button>
+            <button class="tab" onclick="showTab('jobs')">📊 Jobs</button>
+            <button class="tab" onclick="showTab('api')">🔌 API</button>
+        </div>
+        
+        <!-- Tab Contents -->
+        <div id="scrape-tab" class="tab-content active">
+            <h2>Start New Scraping Job</h2>
+            <form id="scrape-form">
+                <div class="form-group">
+                    <label>URL to Scrape</label>
+                    <input type="url" id="url" placeholder="https://example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Strategy</label>
+                    <select id="strategy">
+                        <option value="auto">Auto (Recommended)</option>
+                        <option value="cloudscraper">CloudScraper (Cloudflare)</option>
+                        <option value="requests">Fast Requests</option>
+                        <option value="selenium">Selenium (JavaScript)</option>
+                        <option value="undetected">Undetected Chrome (Maximum Stealth)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Output Format</label>
+                    <select id="output-format">
+                        <option value="json">JSON</option>
+                        <option value="html">HTML</option>
+                        <option value="text">Plain Text</option>
+                        <option value="markdown">Markdown</option>
+                        <option value="structured">Structured (DB)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Save To</label>
+                    <select id="destination">
+                        <option value="return">Just Return Data</option>
+                        <option value="csv">CSV File</option>
+                        <option value="google_sheets">Google Sheets</option>
+                        <option value="database">Database</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="use-proxy" checked> Use Proxy Rotation
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn">Start Scraping</button>
+            </form>
+            
+            <div id="scrape-result" style="margin-top: 20px;"></div>
+        </div>
+        
+        <div id="recipes-tab" class="tab-content">
+            <h2>Recipe Templates</h2>
+            <button class="btn" onclick="createRecipe()">+ Create Recipe</button>
+            <div id="recipes-list" style="margin-top: 20px;"></div>
+        </div>
+        
+        <div id="schedules-tab" class="tab-content">
+            <h2>Scheduled Jobs</h2>
+            <button class="btn" onclick="createSchedule()">+ Add Schedule</button>
+            <div id="schedules-list" style="margin-top: 20px;"></div>
+        </div>
+        
+        <div id="jobs-tab" class="tab-content">
+            <h2>Job History</h2>
+            <div id="jobs-list"></div>
+        </div>
+        
+        <div id="api-tab" class="tab-content">
+            <h2>API Documentation</h2>
+            <pre style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
+# Authentication
+X-API-Key: your-api-key
+
+# Endpoints
+
+POST /api/v3/scrape
+{
+    "url": "https://example.com",
+    "strategy": "auto",
+    "output_format": "json",
+    "destination": "csv",
+    "use_proxy": true
+}
+
+GET /api/recipes
+GET /api/recipes/{id}
+POST /api/recipes
+PUT /api/recipes/{id}
+DELETE /api/recipes/{id}
+POST /api/recipes/{id}/execute
+
+GET /api/schedules
+POST /api/schedules
+GET /api/schedules/{id}
+POST /api/schedules/{id}/pause
+POST /api/schedules/{id}/resume
+DELETE /api/schedules/{id}
+
+GET /api/jobs/{id}
+GET /api/health
+GET /api/export/csv
+            </pre>
+        </div>
+    </div>
+    
+    <script>
+        let currentTab = 'scrape';
+        
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+            currentTab = tabName;
+            
+            // Load tab data
+            if (tabName === 'recipes') loadRecipes();
+            if (tabName === 'schedules') loadSchedules();
+            if (tabName === 'jobs') loadJobs();
+        }
+        
+        // Load dashboard stats
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/dashboard/stats');
+                const data = await response.json();
+                
+                document.getElementById('proxy-count').textContent = data.total_proxies;
+                document.getElementById('recipe-count').textContent = data.total_recipes;
+                document.getElementById('schedule-count').textContent = data.scheduled_jobs;
+                document.getElementById('active-jobs').textContent = data.active_jobs;
+                
+                const schedulerStatus = document.getElementById('scheduler-status');
+                schedulerStatus.textContent = data.scheduler_status;
+                schedulerStatus.className = 'status ' + (data.scheduler_status === 'running' ? 'active' : 'failed');
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        // Scraping form
+        document.getElementById('scrape-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                url: document.getElementById('url').value,
+                strategy: document.getElementById('strategy').value,
+                output_format: document.getElementById('output-format').value,
+                destination: document.getElementById('destination').value,
+                options: {
+                    use_proxy: document.getElementById('use-proxy').checked
+                }
+            };
+            
+            const resultDiv = document.getElementById('scrape-result');
+            resultDiv.innerHTML = '<div class="status processing">Processing...</div>';
+            
+            try {
+                const response = await fetch('/api/v3/scrape', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Internal': 'true'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                // Poll for results
+                pollJobStatus(data.job_id, resultDiv);
+                
+            } catch (error) {
+                resultDiv.innerHTML = '<div class="status failed">Error: ' + error.message + '</div>';
+            }
+        });
+        
+        async function pollJobStatus(jobId, resultDiv) {
+            const interval = setInterval(async () => {
+                try {
+                    const response = await fetch('/api/jobs/' + jobId);
+                    const job = await response.json();
+                    
+                    if (job.status === 'completed') {
+                        clearInterval(interval);
+                        resultDiv.innerHTML = `
+                            <div class="status completed">✅ Scraping Complete!</div>
+                            <pre style="background: #f5f5f5; padding: 10px; margin-top: 10px; max-height: 300px; overflow: auto;">
+${JSON.stringify(job.result, null, 2)}
+                            </pre>
+                        `;
+                    } else if (job.status === 'failed') {
+                        clearInterval(interval);
+                        resultDiv.innerHTML = '<div class="status failed">❌ Failed: ' + job.error + '</div>';
+                    }
+                } catch (error) {
+                    clearInterval(interval);
+                    resultDiv.innerHTML = '<div class="status failed">Error checking status</div>';
+                }
+            }, 2000);
+        }
+        
+        async function loadRecipes() {
+            const response = await fetch('/api/recipes');
+            const recipes = await response.json();
+            
+            const html = recipes.map(recipe => `
+                <div class="recipe-card">
+                    <div>
+                        <strong>${recipe.name}</strong>
+                        <br><small>Used ${recipe.usage_count} times</small>
+                    </div>
+                    <div>
+                        <button class="btn" onclick="executeRecipe('${recipe.id}')">Run</button>
+                        <button class="btn secondary" onclick="deleteRecipe('${recipe.id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('recipes-list').innerHTML = html || '<p>No recipes yet</p>';
+        }
+        
+        async function loadSchedules() {
+            const response = await fetch('/api/schedules');
+            const schedules = await response.json();
+            
+            const html = schedules.map(schedule => `
+                <div class="schedule-item">
+                    <strong>${schedule.name}</strong>
+                    <br>Type: ${schedule.schedule_type}
+                    <br>Next run: ${schedule.next_run || 'Not scheduled'}
+                    <br>Status: <span class="status ${schedule.enabled ? 'active' : 'failed'}">${schedule.enabled ? 'Active' : 'Paused'}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('schedules-list').innerHTML = html || '<p>No schedules yet</p>';
+        }
+        
+        async function loadJobs() {
+            const response = await fetch('/api/dashboard/stats');
+            const data = await response.json();
+            
+            const html = data.recent_jobs.map(job => `
+                <div class="job-item">
+                    <div>
+                        <strong>${job.url || 'Unknown URL'}</strong>
+                        <br><small>${job.created_at}</small>
+                    </div>
+                    <span class="status ${job.status}">${job.status}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('jobs-list').innerHTML = html || '<p>No jobs yet</p>';
+        }
+        
+        // Initialize
+        loadStats();
+        setInterval(loadStats, 5000); // Refresh every 5 seconds
+    </script>
+</body>
+</html>
